@@ -747,6 +747,60 @@
     基于 TransactionProxyFactoryBean的声明式事务管理
     基于 <span class="token annotation punctuation">@Transactional</span> 的声明式事务管理
     基于Aspectj AOP配置事务</code></pre>
+<h3 id="105-mysql索引的优缺点？"><a href="#105-mysql索引的优缺点？" class="headerlink" title="105.mysql索引的优缺点？"></a>105.mysql索引的优缺点？</h3><pre class=" language-java"><code class="language-java">优点<span class="token operator">:</span>
+<span class="token number">1</span><span class="token punctuation">.</span>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性。
+<span class="token number">2</span><span class="token punctuation">.</span>可以大大加快数据的检索速度，这也是创建索引的最主要的原因。
+<span class="token number">3</span><span class="token punctuation">.</span>可以加速表和表之间的连接，特别是在实现数据的参考完整性方面特别有意义。
+<span class="token number">4</span><span class="token punctuation">.</span>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间。
+<span class="token number">5</span><span class="token punctuation">.</span>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能。 
+缺点<span class="token operator">:</span>
+<span class="token number">1</span><span class="token punctuation">.</span>创建索引和维护索引要耗费时间，这种时间随着数据量的增加而增加。
+<span class="token number">2</span><span class="token punctuation">.</span>索引需要占物理空间，除了数据表占数据空间之外，每一个索引还要占一定的物理空间，如果要建立聚簇索引，那么需要的空间就会更大。
+<span class="token number">3</span><span class="token punctuation">.</span>当对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度。</code></pre>
+<h3 id="106-mysql什么时候需要创建索引-什么时候不需要"><a href="#106-mysql什么时候需要创建索引-什么时候不需要" class="headerlink" title="106.mysql什么时候需要创建索引?什么时候不需要?"></a>106.mysql什么时候需要创建索引?什么时候不需要?</h3><pre class=" language-java"><code class="language-java">需要创建的场景：
+ <span class="token number">1</span><span class="token punctuation">.</span>主键自动建立唯一索引；
+ <span class="token number">2</span><span class="token punctuation">.</span>频繁作为查询条件的字段应该创建索引；
+ <span class="token number">3</span><span class="token punctuation">.</span>查询中排序的字段创建索引将大大提高排序的速度（索引就是排序加快速查找）；
+ <span class="token number">4</span><span class="token punctuation">.</span>查询中统计或者分组的字段；
+不需要创建的场景：
+ <span class="token number">1</span><span class="token punctuation">.</span>频繁更新的字段不适合创建索引，因为每次更新不单单是更新记录，还会更新索引，保存索引文件
+ <span class="token number">2</span><span class="token punctuation">.</span>where条件里用不到的字段，不创建索引；
+ <span class="token number">3</span><span class="token punctuation">.</span>表记录太少，不需要创建索引；
+ <span class="token number">4</span><span class="token punctuation">.</span>经常增删改的表；
+ <span class="token number">5</span><span class="token punctuation">.</span>数据重复且分布平均的字段，因此为经常查询的和经常排序的字段建立索引。注意某些数据包含大量重复数据，因此他建立索引就没有太大的效果，例如性别字段，只有男女，不适合建立索引。</code></pre>
+<h3 id="107-StringBuilder和StringBuffer的区别"><a href="#107-StringBuilder和StringBuffer的区别" class="headerlink" title="107.StringBuilder和StringBuffer的区别"></a>107.StringBuilder和StringBuffer的区别</h3><pre class=" language-java"><code class="language-java">线程安全性：
+StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。
+StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。
+性能对比：
+StringBuffer 每次都会对 StringBuffer 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 StirngBuilder 相比使用 StringBuffer 仅能获得 <span class="token number">10</span><span class="token operator">%</span><span class="token operator">~</span><span class="token number">15</span><span class="token operator">%</span> 左右的性能提升，但却要冒多线程不安全的风险。</code></pre>
+<h3 id="108-OOM的原因？"><a href="#108-OOM的原因？" class="headerlink" title="108.OOM的原因？"></a>108.OOM的原因？</h3><pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>数据库的cursor没有及时关闭
+<span class="token number">2</span><span class="token punctuation">.</span>构造Adapter没有使用缓存contentview
+<span class="token number">3</span><span class="token punctuation">.</span><span class="token function">RegisterReceiver</span><span class="token punctuation">(</span><span class="token punctuation">)</span>与<span class="token function">unRegisterReceiver</span><span class="token punctuation">(</span><span class="token punctuation">)</span>成对出现
+<span class="token number">4</span><span class="token punctuation">.</span>未关闭InputStream outputStream
+<span class="token number">5</span><span class="token punctuation">.</span>Bitmap 使用后未调用<span class="token function">recycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">6</span><span class="token punctuation">.</span><span class="token keyword">static</span>等关键字
+<span class="token number">7</span><span class="token punctuation">.</span>非静态内部类持有外部类的引用　context泄露</code></pre>
+<h3 id="109-为什么要重写hashcode-方法？"><a href="#109-为什么要重写hashcode-方法？" class="headerlink" title="109.为什么要重写hashcode()方法？"></a>109.为什么要重写hashcode()方法？</h3><pre class=" language-java"><code class="language-java">Object类默认的equals比较规则就是比较两个对象的内存地址。而hashcode是本地方法，java的内存是安全的，因此无法根据散列码得到对象的内存地址，但实际上，hashcode是根据对象的内存地址经哈希算法得来的。</code></pre>
+<h3 id="110-开发过程中高并发的场景？解决高并发使用的方案？"><a href="#110-开发过程中高并发的场景？解决高并发使用的方案？" class="headerlink" title="110.开发过程中高并发的场景？解决高并发使用的方案？"></a>110.开发过程中高并发的场景？解决高并发使用的方案？</h3><pre class=" language-java"><code class="language-java">抢购
+解决方案：
+    借助redis的分布式锁解决抢购中的抢超和重复抢的问题，抢超就是用户抢的商品的数量大于库存，而重复抢就是用户可以重复抢商品。当一个用户来抢购的时候，先去redis获得锁，如果获得不了锁，就持续去获得，当当前用户获得锁之后，就可以去抢购，当抢购完成之后，会释放锁，其他用户就可以获得锁去抢购，为了防止死锁的问题，也就是因为一个用户长期占有这个锁，导致其他用户不能够去抢购，我们在用户获得锁的时候，加上一个defaultExpire<span class="token punctuation">,</span>然后当一个用户长期获得锁，就会自动失效。
+    但这样之后就会导致性能比较低，这样就引入了activeMq消息中间件去实现一个流量削峰的问题，当前端发送抢购请求时，当他获得锁之后，直接返回给用户一个排队成功的信息，实际上处理这个抢购请求的还是我们的consumer，然后处理完成之后将是否抢购成功发给ActiveMq<span class="token punctuation">,</span>然后配置一个监听器，后端做一个轮询接口，前端利用cros实时调用这个轮询接口，这样前端就可以不用等待，是一个异步请求，并且接近实时的获取是否抢购成功。</code></pre>
+<h3 id="111-项目中使用多线程的场景"><a href="#111-项目中使用多线程的场景" class="headerlink" title="111.项目中使用多线程的场景"></a>111.项目中使用多线程的场景</h3><pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>多线程处理后台任务
+    一般来说，我们需要在后台处理的任务，通常会使用定时器来开启后台线程处理，比如有些数据表的状态我需要定时去修改、我们搜索引擎里面的数据需要定时去采集、定时生成统计信息、定时清理上传的垃圾文件等。
+<span class="token number">2</span><span class="token punctuation">.</span>多线程异步处理任务
+    当我们需要处理一个耗时操作并且不要立刻知道处理结果时，我们可以开启后台线程异步处理该耗时操作，这样可以提高用户体验。比如我之前做的一个项目需要上传简历附件，后台需要对简历附件进行解析，保存到数据表中，因为涉及多种格式的处理，所以我们开启多线程异步处理此操作，这样用户就不用等到我们的简历解析完就能看到服务端的响应了。再比如用户下载简历时，我们需要将数据表中的数据生成简历附件并且通过邮件发送到用户邮箱，该操作也可以开启多线程异步处理。
+<span class="token number">3</span><span class="token punctuation">.</span>多线程分布式计算
+    当我们处理一个比较大的耗时任务时，我们可以将该任务切割成多个小的任务，然后开启多个线程同时处理这些小的任务，切割的数量一般根据我们服务器CPU的核数，合理利用多核CPU的优势。比如下载操作可以使用多线程下载提高下载速度；清理文件时，开启多个线程，按目录并行处理等等。</code></pre>
+<h3 id="112-常见的异常"><a href="#112-常见的异常" class="headerlink" title="112.常见的异常"></a>112.常见的异常</h3><pre class=" language-java"><code class="language-java">NullPointerException
+ArrayIndexOutOfBoundsException
+ClassCastException
+FileNotFoundException
+IOException
+SQLException</code></pre>
+<h3 id="113-线程创建的方法有哪些？"><a href="#113-线程创建的方法有哪些？" class="headerlink" title="113.线程创建的方法有哪些？"></a>113.线程创建的方法有哪些？</h3><pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>继承Thread类创建线程
+<span class="token number">2</span><span class="token punctuation">.</span>实现Runnable接口创建线程
+<span class="token number">3</span><span class="token punctuation">.</span>使用Callable和Future创建线程
+<span class="token number">4</span><span class="token punctuation">.</span>使用线程池例如用Executor框架</code></pre>
 
             </div>
             <hr/>
